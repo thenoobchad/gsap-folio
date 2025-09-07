@@ -8,12 +8,16 @@
   font-display: swap;
 }
 
-@font-face {
+/* @font-face {
   font-family: "Amiamie";
   src: url("/fonts/Amiamie-Italic.ttf") format("truetype"), url("/fonts/Amiamie-ItalicRound.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+} */
+
+:root {
+  --font-animie: "Amiamie", sans-serif;
 }
 
 body {
@@ -21,5 +25,5 @@ body {
   color: black;
   scroll-behavior: smooth;
   overflow-x: hidden;
-  font-family: var(--font-amiamie);
+  font-family: var(--font-animie);
 }

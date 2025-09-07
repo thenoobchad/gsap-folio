@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { socials } from "../constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Link } from "react-scroll";
 
 
 export const Navbar = () => {
@@ -80,7 +81,6 @@ export const Navbar = () => {
             
             iconTl.current.reverse();
             tl.current.reverse();
-            console.log("togged menu");
         } else {
             iconTl.current.play();
             tl.current.play();
@@ -93,9 +93,9 @@ export const Navbar = () => {
       <nav ref={navRef} className="fixed z-50 flex flex-col justify-between w-full h-full px-10 uppercase bg-black text-white/80 py-18 gap-y-10 md:w-1/2 md:left-1/2"><div className="flex flex-col text-4xl gap-y-2 md:text-5xl lg:text-7xl">
           {["home", "services", "about", "work", "contact"].map((section, index) => (
               <div key={index} ref={(el) => (linksRef.current[index] = el)}>
-                  <a href="" className="transition-all duration-300 cursor-pointer hover:text-white">
+                  <Link className="transition-all duration-300 cursor-pointer hover:text-white" to={`${section}`} smooth offset duration={1000}>
                       {section}
-                  </a>
+                  </Link>
               </div>
             
       ))}
