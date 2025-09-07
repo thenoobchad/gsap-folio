@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { socials } from "../constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -11,37 +11,66 @@ export const Navbar = () => {
     const contactRef = useRef(null);
     const toplineRef = useRef(null);
     const bottomlineRef = useRef(null);
+    const [isOpen, setIsOpen]  = useState(true);
+
+    const tl = useRef(null);
+    const iconTl = useRef(null);
 
     useGSAP(() => {
-        // gsap.set(navRef.current, { xPercent: 100 });
-        // gsap.set([linksRef.current, contactRef.current], {
-        //     autoAlpha: 0,
-        //     x: -20,
-        // })
+        gsap.set(navRef.current, { xPercent: 100 });
+        gsap.set([linksRef.current, contactRef.current], {
+            autoAlpha: 0,
+            x: -20,
+        });
 
 
-        gsap.timeline({ paused: true }).to(navRef.current, { 
-        xPercent: 0,
-        duration: 1,
-        ease: "power3.out"
-    }).to(linksRef.current, {
-        autoAlpha: 1,
-        x: 0,
-        stagger: 0.1,
-        ease: "power2.out"
-    }, "<").to(contactRef.current, {
-        autoAlpha: 1,
-        x: 0,
-        duration: 0.5,
-        ease:"power2.out"
-    })
-    })
+        tl.current = gsap.timeline({ paused: true })
+            .to(navRef.current, {
+                xPercent: 0,
+                duration: 1,
+                ease: "power3.out"
+            })
+            .to(linksRef.current, {
+                autoAlpha: 1,
+                x: 0,
+                stagger: 0.1,
+                duration: 0.5,
+                ease: "power2.out"
+            }, "<")
+            .to(contactRef.current, {
+                autoAlpha: 1,
+                x: 0,
+                duration: 0.5,
+                ease: "power2.out"
+            }, "+0.2");
+        
+       iconTl.current = gsap.timeline({ paused: true }).to(toplineRef.current, {
+            rotate: 45,
+            y: 3.3,
+            duration: 0.3,
+            ease: "power2.inOut",
+        }).to(bottomlineRef.current, {
+            rotate: -45,
+            y: -3.3,
+            duration: 0.3,
+            ease: "power2.inOut",
+        }, "<");
+    }, [])
 
-    
+    const toggleMenu = () => {
+        if (isOpen) {
+            iconTl.current.reverse();
+            tl.current.reverse();
+        } else {
+            iconTl.current.play();
+            tl.current.play();
+        }
+        setIsOpen(!isOpen);
+    }    
 
     return (
       <>
-      <nav ref={navRef} className="fixed z-50 flex flex-col justify-between w-full h-full px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:w-1/2 md:left-1/2"><div className="flex flex-col text-5xl gap-y-2 md:text-6xl lg:text-8xl">
+      <nav ref={navRef} className="fixed z-50 flex flex-col justify-between w-full h-full px-10 uppercase bg-black text-white/80 py-18 gap-y-10 md:w-1/2 md:left-1/2"><div className="flex flex-col text-4xl gap-y-2 md:text-5xl lg:text-7xl">
           {["home", "services", "about", "work", "contact"].map((section, index) => (
               <div key={index} ref={(el) => (linksRef.current[index] = el)}>
                   <a href="" className="transition-all duration-300 cursor-pointer hover:text-white">
@@ -70,9 +99,9 @@ export const Navbar = () => {
           
             </nav>
             
-            <div className="fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-black rounded-full cursor-pointer w-14 h-14 md:w-20 md:h-20 top-4 right-10"> 
-                <span ref={toplineRef} className="block w-8 h-0.5 bg-white rounded-full origin-center"></span>
-                 <span ref={bottomlineRef} className="block w-8 h-0.5 bg-white rounded-full origin-center"></span>
+            <div onClick={toggleMenu} className="fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-black rounded-full cursor-pointer w-10 h-10 md:w-15 md:h-15 top-4 right-10"> 
+                <span ref={toplineRef} className="block w-6 h-0.5 bg-white rounded-full origin-center"></span>
+                 <span ref={bottomlineRef} className="block w-6 h-0.5 bg-white rounded-full origin-center"></span>
             </div>
         </>
   )
