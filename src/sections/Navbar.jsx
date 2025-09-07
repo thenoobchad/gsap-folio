@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { socials } from "../constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -11,7 +11,8 @@ export const Navbar = () => {
     const contactRef = useRef(null);
     const toplineRef = useRef(null);
     const bottomlineRef = useRef(null);
-    const [isOpen, setIsOpen]  = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [showBurger, setShowBurger] = useState(true);
 
     const tl = useRef(null);
     const iconTl = useRef(null);
@@ -56,6 +57,22 @@ export const Navbar = () => {
             ease: "power2.inOut",
         }, "<");
     }, [])
+
+    useEffect(() => {
+
+        let lastScrollY = window.scrollY;
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            setShowBurger(currentScrollY < lastScrollY || currentScrollY < 10)
+
+            lastScrollY = currentScrollY
+          }
+        window.addEventListener("scroll", handleScroll, {
+            passive: true
+        })
+
+        return () => window.removeEventListener("scroll", handleScroll)
+    },[])
 
     const toggleMenu = () => {
         console.log("toggling menu");
@@ -102,7 +119,9 @@ export const Navbar = () => {
           
             </nav>
             
-            <div onClick={toggleMenu} className="fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-black rounded-full cursor-pointer w-10 h-10 md:w-15 md:h-15 top-4 right-10"> 
+            <div onClick={toggleMenu}
+                style={showBurger ? { clipPath : "circle(50.0% at 50% 50%)"} : {clipPath: "circle(0% at 50% 50%)"} }
+                className="fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-black rounded-full cursor-pointer w-10 h-10 md:w-15 md:h-15 top-4 right-10"> 
                 <span ref={toplineRef} className="block w-6 h-0.5 bg-white rounded-full origin-center"></span>
                  <span ref={bottomlineRef} className="block w-6 h-0.5 bg-white rounded-full origin-center"></span>
             </div>
