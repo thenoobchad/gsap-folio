@@ -11,7 +11,7 @@ export const Navbar = () => {
     const contactRef = useRef(null);
     const toplineRef = useRef(null);
     const bottomlineRef = useRef(null);
-    const [isOpen, setIsOpen]  = useState(true);
+    const [isOpen, setIsOpen]  = useState(false);
 
     const tl = useRef(null);
     const iconTl = useRef(null);
@@ -58,9 +58,12 @@ export const Navbar = () => {
     }, [])
 
     const toggleMenu = () => {
+        console.log("toggling menu");
         if (isOpen) {
+            
             iconTl.current.reverse();
             tl.current.reverse();
+            console.log("togged menu");
         } else {
             iconTl.current.play();
             tl.current.play();
